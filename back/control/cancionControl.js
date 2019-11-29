@@ -12,10 +12,10 @@ function crearCancion(req, res){
     // Para mayor organización de código vamos a guardar cada propiedad
     // del cuerpo de la petición en la variable usuario
     cancion.titulo = parametros.titulo;
-    cancion.numeroCancion = parametros.numeroCancion;
-    cancion.duracionCancion = parametros.duracionCancion;
-    cancion.urlCancion = null;
-    cancion.generoCancion = parametros.generoCancion;
+    cancion.numero = parametros.numero;
+    cancion.duracion = parametros.duracion;
+    cancion.url = null;
+    cancion.genero = parametros.genero;
     cancion.artista = parametros.artista;
     cancion.album = parametros.album;
 
@@ -43,47 +43,81 @@ function crearCancion(req, res){
     });
 }
 
-
-
-/*
-function login(req, res){
+function buscarCancion(req, res){
     var parametros = req.body;
-    var correoUsuario = parametros.correo;
-    var contraUsuario = parametros.contrasena;
+    var titulo = parametros.titulo;
 
-    // Buscamos al usuario a través del correo. Usamos toLowerCase() para evitar problemas de datos
-    Usuario.findOne({correo: correoUsuario.toLowerCase()}, (err, usuarioLogueado)=>{
-        if(err){
+    Cancion.findOne({titulo: titulo}, (err, cancionEncontrada)=>{
+        if (err){
             res.status(500).send({
-                message: "Error en el servidor!!"
+                message: "Error en el servidor"
             });
-        }else {
-            if(!usuarioLogueado){
+        }else{
+            if(!cancionEncontrada){
                 res.status(404).send({
-                    message: "No has podido iniciar sesión. Verifica que tus datos sean correctos"
+                    message: "Canción no encontrada"
                 });
             }else{
-                if(usuarioLogueado.contrasena != contraUsuario){
-                    res.status(404).send({
-                        message: "Contraseña incorrecta!"
-                    });
-                } else{
-                    res.status(200).send({
-                        usuario: usuarioLogueado
-                    });
-                }
+            res.status(200).send({
+                cancion: cancionEncontrada
+            });
+        }
+    }
+});
+}
+
+function buscarGenero(req, res){
+    var parametros = req.body;
+    var generoCanciones = parametros.genero;
+
+    Cancion.find({genero: generoCanciones.toLowerCase()}, (err, cancionEncontrada)=>{
+        if (err){
+            res.status(500).send({
+                message: "Error en el servidor"
+            });
+        }else{
+            if(!cancionEncontrada){
+                res.status(404).send({
+                    message: "Canción no encontrada"
+                });
+            }else{
+            res.status(200).send({
+                cancion: cancionEncontrada
+            });
+        }
+    }
+});
+
+}
+
+function actualizarCancion(req, res){
+    var cancionId = req.params.id;
+    var actualizarCancion = req.body;
+
+    // db.coleccion.findByIdAndUpdate('a quien quiero actualizar', 'que campos / datos vas a modificar')
+    Cancion.findByIdAndUpdate(cancionId, actualizarCancion, (err, cancionActualizada)=>{
+        if(err){
+            res.status(500).send({
+                message: "Error en el servidor"
+            });
+        }else{
+            if(!cancionActualizada){
+                res.status(404).send({
+                    message: "No se pudo actualizar la canción"
+                });
+            } else{
+                res.status(200).send({
+                    cancion: cancionActualizada
+                });
             }
         }
     });
-}
+} 
 
+function eliminarCancion(req, res){
+    var cancionId = req.params.id;
 
-function actualizarUsuario(req, res){
-    var usuarioId = req.params.id;
-    var datosUsuarioActualizar = req.body;
-
-    // db.coleccion.findByIdAndUpdate('a quien quiero actualizar', 'que campos / datos vas a modificar')
-    Usuario.findByIdAndUpdate(usuarioId, datosUsuarioActualizar, (err, usuarioActualizado)=>{
+    Cancion.findByIdAndDelete(cancionId, (err, cancionEliminada)=>{
         if(err){
             res.status(500).send({
                 message: "Error en el servidor"
@@ -91,19 +125,22 @@ function actualizarUsuario(req, res){
         }else{
             if(!usuarioActualizado){
                 res.status(404).send({
-                    message: "No se pudo actualizar"
+                    message: "No se pudo eliminar la canción"
                 });
             } else{
                 res.status(200).send({
-                    usuario: usuarioActualizado
+                    cancion: cancionEliminada
                 });
             }
         }
     });
-} */
+}  
+
 
 module.exports = {
     crearCancion,
-    /*login,
-    actualizarUsuario*/
+    buscarCancion,
+    buscarGenero,
+    actualizarCancion,
+    eliminarCancion
 };

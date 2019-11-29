@@ -22,8 +22,7 @@ app.use(bodyParser.json());
 // Configurar permisos de acceso a cualquier cliente
 
 // Consumo de las rutas
-// app.use('/api', usuarioRutas); // acá estamos usando todas las rutas del usuario que activan las funciones
-// /api/registro
+// app.use('/api', CancionRutas); // acá estamos usando todas las rutas del usuario que activan las funciones
 
 app.use('/api', CancionRutas);
 

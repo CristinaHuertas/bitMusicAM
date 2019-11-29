@@ -3,10 +3,10 @@ const Schema = mongoose.Schema;
 
 var CancionSchema = new Schema({
     titulo: String,
-    numeroCancion: String,
-    duracionCancion: String,
-    urlCancion: String,
-    generoCancion: String,
+    numero: String,
+    duracion: String,
+    url: String,
+    genero: String,
     artista: String,
     album: String
 });
